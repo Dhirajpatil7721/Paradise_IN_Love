@@ -539,3 +539,26 @@ export async function refreshToken(request,response){
         })
     }
 }
+
+//Find All users 
+
+export const getAllUsersfromdb = async (req, res) => {
+  try {
+    const users = await UserModel.find()
+      .populate("address_details")
+      .populate("shopping_cart")
+      .populate("orderHistory");
+
+    res.status(200).json({
+      success: true,
+      message: "All users fetched successfully",
+      data: users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching users",
+      error: error.message,
+    });
+  }
+};

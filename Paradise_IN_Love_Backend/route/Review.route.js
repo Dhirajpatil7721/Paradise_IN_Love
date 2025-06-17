@@ -7,6 +7,6 @@ const reviewproduct = Router()
 
 reviewproduct.post('/create',auth,addReview)
 reviewproduct.get("/get",auth,getProductReviews)
-reviewproduct.get('/product-details',auth,getProductDetails)
+reviewproduct.post('/product-details',auth,getProductDetails)
 
 export default reviewproduct

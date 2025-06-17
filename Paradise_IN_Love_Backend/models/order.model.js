@@ -69,7 +69,12 @@ const orderSchema = new mongoose.Schema({
     product_details: {
         name: String,
         image: Array,
-        size: String, // ✅ Added size here
+        size: String, 
+    },
+    quantity: {
+        type: Number,
+        required: true,
+        default: 1 
     },
     paymentId: {
         type: String,
@@ -99,7 +104,7 @@ const orderSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const OrderModel = mongoose.model('order',orderSchema)
+const OrderModel = mongoose.model('order', orderSchema)
 
 export default OrderModel
 

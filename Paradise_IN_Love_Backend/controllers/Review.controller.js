@@ -1,6 +1,6 @@
 import ReviewModel from '../models/Review.Model.js';
 import ProductModel from "../models/product.model.js"; 
-
+import mongoose from "mongoose";
 //Add
 export const addReview = async (req, res) => {
   try {
@@ -28,15 +28,13 @@ export const addReview = async (req, res) => {
   }
 };
 
-//Get_All
+// Get all reviews 
 export const getProductReviews = async (req, res) => {
   try {
-    const { productId } = req.body;
-
-    const reviews = await ReviewModel.find({ product: productId }).populate("user", "name");
+    const reviews = await ReviewModel.find(); // No filter, fetch all reviews
 
     return res.json({
-      message: "Reviews fetched successfully",
+      message: "All reviews fetched successfully",
       data: reviews,
       success: true,
       error: false
@@ -53,25 +51,36 @@ export const getProductReviews = async (req, res) => {
 //Show reviews in getProductDetails
 export const getProductDetails = async (req, res) => {
   try {
-    const { productId } = req.query;
+    const { productId } = req.body;
 
-    const product = await ProductModel.findById(productId)
-      .populate("category subCategory");
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({
+        message: "Invalid product ID",
+        success: false,
+        error: true,
+      });
+    }
 
-    const reviews = await ReviewModel.find({ product: productId })
-      .populate("user", "name");
+    // Fetch reviews
+    const reviews = await ReviewModel.find({ product: productId }).populate("user", "name");
 
     return res.json({
-      message: "Product details with reviews",
-      data: { product, reviews },
+      message: "Reviews fetched successfully",
+      data: reviews,
       success: true,
-      error: false
+      error: false,
     });
   } catch (error) {
+    console.error("Error in getReviewsByProductId:", error);
     return res.status(500).json({
-      message: error.message || error,
+      message: error.message || "Internal server error",
       success: false,
-      error: true
+      error: true,
     });
   }
 };
+
+
+
+

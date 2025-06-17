@@ -166,7 +166,7 @@
 //             paymentId  : session.payment_intent,
 //             payment_status : session.payment_status,
 //         })
-    
+
 //       const order = await OrderModel.insertMany(orderProduct)
 
 //         console.log(order)
@@ -256,6 +256,50 @@ import mongoose from "mongoose";
 //     }
 // }
 
+//Order Place 
+// export async function CashOnDeliveryOrderController(request, response) {
+//     try {
+//         const userId = request.userId; // From auth middleware
+//         const { list_items, totalAmt, addressId, subTotalAmt } = request.body;
+
+//         const payload = list_items.map(el => ({
+//             userId: userId,
+//             orderId: `ORD-${new mongoose.Types.ObjectId()}`,
+//             productId: el.productId._id,
+//             product_details: {
+//                 name: el.productId.name,
+//                 image: el.productId.image,
+//                 size: el.size, 
+//             },
+//             paymentId: "",
+//             payment_status: "CASH ON DELIVERY",
+//             delivery_address: addressId,
+//             subTotalAmt: subTotalAmt,
+//             totalAmt: totalAmt,
+//         }));
+
+//         const generatedOrder = await OrderModel.insertMany(payload);
+
+//         // Clear user's cart
+//         await CartProductModel.deleteMany({ userId });
+//         await UserModel.updateOne({ _id: userId }, { shopping_cart: [] });
+
+//         return response.json({
+//             message: "Order placed successfully",
+//             error: false,
+//             success: true,
+//             data: generatedOrder,
+//         });
+
+//     } catch (error) {
+//         return response.status(500).json({
+//             message: error.message || error,
+//             error: true,
+//             success: false,
+//         });
+//     }
+// }
+
 export async function CashOnDeliveryOrderController(request, response) {
     try {
         const userId = request.userId; // From auth middleware
@@ -268,14 +312,16 @@ export async function CashOnDeliveryOrderController(request, response) {
             product_details: {
                 name: el.productId.name,
                 image: el.productId.image,
-                size: el.size, // ✅ Added size here
+                size: el.size,
             },
+            quantity: el.quantity, // ✅ Mapped at top-level
             paymentId: "",
             payment_status: "CASH ON DELIVERY",
             delivery_address: addressId,
             subTotalAmt: subTotalAmt,
             totalAmt: totalAmt,
         }));
+
 
         const generatedOrder = await OrderModel.insertMany(payload);
 
@@ -298,6 +344,7 @@ export async function CashOnDeliveryOrderController(request, response) {
         });
     }
 }
+
 
 // Get User Order Details
 export async function getOrderDetailsController(request, response) {
@@ -324,3 +371,66 @@ export async function getOrderDetailsController(request, response) {
         });
     }
 }
+
+
+//Get all Orders Admin
+export const getAllOrdersFromDB = async (req, res) => {
+    try {
+        const orders = await OrderModel.find()
+            .populate("userId")
+            .populate("productId")
+            .populate("delivery_address");
+
+        res.status(200).json({
+            success: true,
+            message: "All orders fetched successfully",
+            data: orders,
+        });
+    } catch (error) {
+        console.error("Error fetching orders:", error.message);
+        res.status(500).json({
+            success: false,
+            message: "Error while fetching orders",
+            error: error.message,
+        });
+    }
+};
+
+// Delete order using orderId from req.body
+export const deleteOrderByOrderId = async (req, res) => {
+  try {
+    const { orderId } = req.body; // <- from body
+
+    if (!orderId) {
+      return res.status(400).json({
+        success: false,
+        message: "orderId is required in request body",
+      });
+    }
+
+    const deletedOrder = await OrderModel.findOneAndDelete({ orderId });
+
+    if (!deletedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "No order found with the given orderId",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order deleted successfully",
+      data: deletedOrder,
+    });
+  } catch (error) {
+    console.error("Error deleting order:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Error while deleting order",
+      error: error.message,
+    });
+  }
+};
+
+
+
