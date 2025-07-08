@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -14,7 +11,7 @@ const SignIn = () => {
   const handleChange = e => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -105,9 +102,11 @@ const SignIn = () => {
           </form>
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer  autoClose={50}/>
     </div>
   );
 };
 
 export default SignIn;
+
+

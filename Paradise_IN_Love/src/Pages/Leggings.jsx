@@ -9,30 +9,7 @@ const Leggings = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const fetchProductsByCategory = async () => {
-  //     try {
-  //       const response = await fetch('http://localhost:8080/api/product/get-pruduct-by-category-and-subcategory', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({
-  //           categoryId: ['683ec921da32e0d2140a5ab3'],
-  //           subCategoryId: ['68402c3bfef586f973129625'],
-  //           page: 1,
-  //           limit: 12,
-  //         }),
-  //       });
-  //       const data = await response.json();
-  //       setProducts(data.data || []);
-  //     } catch (error) {
-  //       console.error('Error fetching products:', error);
-  //       toast.error('Failed to load products');
-  //     }
-  //   };
-
-  //   fetchProductsByCategory();
-  // }, []);
-
+  
   useEffect(() => {
     const fetchProductsByCategory = async () => {
       try {

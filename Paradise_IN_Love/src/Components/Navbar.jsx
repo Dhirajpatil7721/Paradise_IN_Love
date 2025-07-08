@@ -1,4 +1,5 @@
-// import { useState } from "react";
+
+// import { useState, useRef, useEffect } from "react";
 // import {
 //   FaSearch,
 //   FaUser,
@@ -9,50 +10,71 @@
 //   FaBars,
 // } from "react-icons/fa";
 // import { motion, AnimatePresence } from "framer-motion";
-// import { Link } from "react-router-dom";
+// import { Link, useLocation, useNavigate } from "react-router-dom";
+// import axios from "axios";
 
 // export default function Navbar() {
-//   const [showSearch, setShowSearch] = useState(false);
-//   const [searchTerm, setSearchTerm] = useState("");
 //   const [activeLink, setActiveLink] = useState("Home");
-//   const [openDropdown, setOpenDropdown] = useState(null);
 //   const [menuOpen, setMenuOpen] = useState(false);
 //   const [open, setOpen] = useState(false);
-//   const navLinks = [
-//     {
-//       name: "Kurti",
-//       path: "/kurti",
-      
-//     },
-//     {
-//       name: "Anarkali Suit",
-//       path: "/anarkali",
-     
-//     },
-//     {
-//       name: "Gown",
-//       path: "/gown",
-     
-//     },
-//     {
-//       name: "Dress Material",
-//       path: "/dress-material",
-     
-//     },
-//     {
-//       name: "Saree",
-//       path: "/saree",
-     
-//     },
-//     {
-//       name: "Leggings",
-//       path: "/leggings",
-//     },
-//   ];
+//   const [categories, setCategories] = useState([]);
+//   const dropdownRef = useRef(null);
+//   const navigate = useNavigate();
 
-//   const filteredLinks = navLinks.filter((link) =>
-//     link.name.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
+//   // Close dropdown when clicking outside
+//   useEffect(() => {
+//     const handleClickOutside = (event) => {
+//       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+//         setOpen(false);
+//       }
+//     };
+//     document.addEventListener("mousedown", handleClickOutside);
+//     return () => {
+//       document.removeEventListener("mousedown", handleClickOutside);
+//     };
+//   }, []);
+
+//   // Fetch categories
+//   useEffect(() => {
+//     axios.get('http://localhost:8080/api/category/get-category', {
+//       withCredentials: true,
+//     })
+//       .then((res) => {
+//         const minimalCategories = res.data.data.map(cat => ({
+//           _id: cat._id,
+//           name: cat.name,
+//           slug: cat.name.toLowerCase().replace(/\s+/g, '-')
+//         }));
+//         setCategories(minimalCategories);
+//       })
+//       .catch((err) => {
+//         console.error('Error fetching categories:', err);
+//       });
+//   }, []);
+
+//   // const handleCategoryClick = (category) => {
+//   //   setActiveLink(category.name);
+//   //   navigate(`/${category.slug}`, {
+//   //     state: {
+//   //       categoryId: category._id,
+//   //       categoryName: category.name,
+//   //       fullCategory: category,
+//   //       event: "user-click"
+//   //     }
+//   //   });
+//   // };
+//   const handleCategoryClick = (category) => {
+//     console.log("🖱️ Clicked Category ID:", category._id); // ✅ Log here
+//     setActiveLink(category.name);
+//     navigate(`/${category.slug}`, {
+//       state: {
+//         categoryId: category._id,
+//         categoryName: category.name,
+//         fullCategory: category,
+//         event: "user-click"
+//       }
+//     });
+//   };
 
 //   return (
 //     <nav className="mt-5 ml-4 mr-4 md:ml-28 md:mr-2 bg-white/10 backdrop-blur-md border border-white/10 w-[95%] md:w-5/6 px-4 md:px-6 py-3 fixed top-0 z-50 text-black dark:text-white font-bold rounded-lg">
@@ -65,8 +87,48 @@
 //           />
 //         </motion.div>
 
-//         {/* Mobile menu button */}
-//         <div className="md:hidden">
+//         {/* Desktop Navigation */}
+//         <div className="hidden md:flex space-x-4 relative">
+//           {categories.slice(-7).map((cat) => (  // Changed from slice(0, 6) to slice(-6)
+//             <motion.div
+//               key={cat._id}
+//               className="relative"
+//               whileHover={{ scale: 1.05 }}
+//             >
+//               <button
+//                 onClick={() => handleCategoryClick(cat)}
+
+//                 // className={`relative px-1 py-2 text-gray-900 hover:text-pink-600 transition-colors ${activeLink === cat.name ? "text-pink-600 font-medium" : ""
+//                 //   }`}
+
+//                 className={`relative px-1 py-2 no-underline  border-none bg-none font-semibold font-[Poppins] text-greay transition-colors before:content-[''] before:ml-auto before:block before:h-[2px] before:w-0 before:bg-[#f44336] before:transition-all before:duration-500 after:content-[''] after:block after:h-[2px] after:w-0 after:bg-[#f44336] after:transition-all after:duration-500 hover:before:w-full hover:after:w-full ${activeLink === cat.name ? "text-[#f44336] font-medium" : "hover:text-[#f44336]"
+//                   }`}
+
+
+//               >
+//                 {cat.name}
+//                 {activeLink === cat.name && (
+//                   <motion.span
+//                     layoutId="navUnderline"
+//                     className="absolute left-0 bottom-0 w-full h-0.5 bg-pink-600 rounded-full"
+//                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+//                   />
+//                 )}
+//               </button>
+//             </motion.div>
+//           ))}
+//         </div>
+
+//         {/* Mobile Menu Button */}
+//         <div className="md:hidden flex items-center space-x-4">
+//           <motion.button
+//             whileTap={{ scale: 0.9 }}
+//             onClick={() => navigate('/search')}
+//             className="text-gray-900 hover:text-pink-600"
+//           >
+//             <FaSearch className="text-lg" />
+//           </motion.button>
+
 //           <button
 //             className="text-black dark:text-white text-xl"
 //             onClick={() => setMenuOpen(!menuOpen)}
@@ -75,229 +137,154 @@
 //           </button>
 //         </div>
 
-//         {/* Desktop Navigation */}
-//         <div className="hidden md:flex space-x-4 relative">
-//           {navLinks.map((link) => (
-//             <motion.div
-//               key={link.name}
-//               className="relative"
-//               onMouseEnter={() => setOpenDropdown(link.name)}
-//               onMouseLeave={() => setOpenDropdown(null)}
-//             >
-//               <Link
-//                 to={link.path}
-//                 className={`relative px-1 py-2 text-gray-900 hover:text-pink-600 transition-colors ${
-//                   activeLink === link.name ? "text-pink-600 font-medium" : ""
-//                 }`}
-//                 onClick={() => setActiveLink(link.name)}
-//               >
-//                 {link.name}
-//                 {activeLink === link.name && (
-//                   <motion.span
-//                     layoutId="navUnderline"
-//                     className="absolute left-0 bottom-0 w-full h-0.5 bg-pink-600 rounded-full"
-//                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-//                   />
-//                 )}
-//               </Link>
+//         {/* Desktop Right Icons */}
+//         <div className="hidden md:flex items-center space-x-4">
+//           <motion.button
+//             whileTap={{ scale: 0.9 }}
+//             onClick={() => navigate('/search')}
+//             className="text-gray-900 hover:text-pink-600"
+//           >
+//             <FaSearch className="text-lg" />
+//           </motion.button>
 
-//               {/* Dropdown */}
-//               {link.subLinks && openDropdown === link.name && (
-//                 <motion.div
-//                   initial={{ opacity: 0, y: -10 }}
-//                   animate={{ opacity: 1, y: 0 }}
-//                   exit={{ opacity: 0, y: -10 }}
-//                   className="absolute top-full left-0 mt-2 w-44 bg-white border rounded shadow-lg z-40"
-//                 >
-//                   {link.subLinks.map((sub) => (
-//                     <Link
-//                       key={sub.name}
-//                       to={sub.path}
-//                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-pink-100"
-//                       onClick={() => {
-//                         setActiveLink(link.name);
-//                         setOpenDropdown(null);
-//                       }}
-//                     >
-//                       {sub.name}
-//                     </Link>
-//                   ))}
-//                 </motion.div>
-//               )}
-//             </motion.div>
-//           ))}
-//         </div>
+//           <motion.div whileHover={{ y: -2 }}>
+//             <Link to="/" className="text-gray-900 hover:text-pink-600">
+//               <FaHome className="text-xl" />
+//             </Link>
+//           </motion.div>
+//           <motion.div whileHover={{ y: -2 }}>
+//             <Link to="/wishlist" className="text-gray-900 hover:text-red-600">
+//               <FaHeart className="text-xl" />
+//             </Link>
+//           </motion.div>
+//           <motion.div whileHover={{ y: -2 }}>
+//             <Link to="/cart" className="text-gray-900 hover:text-pink-600">
+//               <FaShoppingCart className="text-xl" />
+//             </Link>
+//           </motion.div>
 
-//         {/* Right Icons */}
-//         <div className="flex items-center space-x-3 md:space-x-4">
-//           {/* Search */}
+//           {/* User Dropdown */}
 //           <div className="relative">
-//             <motion.button
-//               whileTap={{ scale: 0.9 }}
-//               onClick={() => {
-//                 setShowSearch(!showSearch);
-//                 setSearchTerm("");
-//               }}
-//               className="text-gray-900 mt-2 hover:text-pink-600 focus:outline-none"
+//             <motion.div
+//               whileHover={{ y: -2 }}
+//               onClick={() => setOpen(!open)}
+//               className="cursor-pointer"
 //             >
-//               {showSearch ? (
-//                 <FaTimes className="text-lg mt-[2px]" />
-//               ) : (
-//                 <FaSearch className="text-lg mt-[2px]" />
-//               )}
-//             </motion.button>
+//               <div className="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
+//                 <FaUser className="text-sm" />
+//               </div>
+//             </motion.div>
 
-//             <AnimatePresence>
-//               {showSearch && (
-//                 <motion.div
-//                   initial={{ opacity: 0, y: -10 }}
-//                   animate={{ opacity: 1, y: 0 }}
-//                   exit={{ opacity: 0, y: -10 }}
-//                   transition={{ type: "spring", damping: 20 }}
-//                   className="absolute top-10 right-0 bg-white shadow-lg rounded-lg w-72 p-3 z-50"
+//             {open && (
+//               <motion.div
+//                 ref={dropdownRef}
+//                 initial={{ opacity: 0, y: -10 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 exit={{ opacity: 0 }}
+//                 className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50"
+//               >
+//                 <Link
+//                   to="/account"
+//                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+//                   onClick={() => setOpen(false)}
 //                 >
-//                   <input
-//                     type="text"
-//                     placeholder="Search categories..."
-//                     className="border border-gray-300 rounded-full px-4 py-2 w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
-//                     value={searchTerm}
-//                     onChange={(e) => setSearchTerm(e.target.value)}
-//                     autoFocus
-//                   />
-//                   {searchTerm && (
-//                     <div className="mt-2">
-//                       {filteredLinks.length > 0 ? (
-//                         filteredLinks.map((link) => (
-//                           <Link
-//                             key={link.name}
-//                             to={link.path}
-//                             className="block px-4 py-2 rounded hover:bg-pink-100 text-sm text-gray-700"
-//                             onClick={() => {
-//                               setActiveLink(link.name);
-//                               setShowSearch(false);
-//                             }}
-//                           >
-//                             {link.name}
-//                           </Link>
-//                         ))
-//                       ) : (
-//                         <p className="text-sm text-gray-500 px-4 py-2">
-//                           No matches found
-//                         </p>
-//                       )}
-//                     </div>
-//                   )}
-//                 </motion.div>
-//               )}
-//             </AnimatePresence>
-//           </div>
-
-//           {/* Icons */}
-//           <div className="flex items-center space-x-3 md:space-x-5">
-//             <motion.div whileHover={{ y: -2 }}>
-//               <Link to="/" className="text-gray-900 hover:text-pink-600">
-//                 <FaHome className="text-xl md:text-2xl" />
-//               </Link>
-//             </motion.div>
-//             <motion.div whileHover={{ y: -2 }}>
-//               <Link to="/wishlist" className="text-gray-900 hover:text-pink-600">
-//                 <FaHeart className="text-lg md:text-xl" />
-//               </Link>
-//             </motion.div>
-//             <motion.div whileHover={{ y: -2 }}>
-//               <Link to="/cart" className="text-gray-900 hover:text-pink-600">
-//                 <FaShoppingCart className="text-lg md:text-xl" />
-//               </Link>
-//             </motion.div>
-//             {/* <motion.div whileHover={{ y: -2 }}>
-//               <Link to="/account" className="text-gray-600 hover:text-pink-600">
-//                 <div className="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
-//                   <FaUser className="text-sm" />
-//                 </div>
-//               </Link>
-//             </motion.div> */}
-
-
-// <div className="relative">
-//       <motion.div
-//         whileHover={{ y: -2 }}
-//         onClick={() => setOpen(!open)}
-//         className="cursor-pointer"
-//       >
-//         <div className="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
-//           <FaUser className="text-sm" />
-//         </div>
-//       </motion.div>
-
-//       {open && (
-//         <motion.div
-//           initial={{ opacity: 0, y: -10 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           exit={{ opacity: 0 }}
-//           className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50"
-//         >
-//           <Link
-//             to="/account"
-//             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-//             onClick={() => setOpen(false)}
-//           >
-//             Account
-//           </Link>
-//           <Link
-//             to="/userorders"
-//             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-//             onClick={() => setOpen(false)}
-//           >
-//             Orders
-//           </Link>
-//         </motion.div>
-//       )}
-//     </div>
-  
-
-
+//                   Account
+//                 </Link>
+//                 <Link
+//                   to="/userorders"
+//                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+//                   onClick={() => setOpen(false)}
+//                 >
+//                   Orders
+//                 </Link>
+//                 <Link
+//                   to="/signin"
+//                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+//                   onClick={() => setOpen(false)}
+//                 >
+//                   Sign In
+//                 </Link>
+//               </motion.div>
+//             )}
 //           </div>
 //         </div>
 //       </div>
 
 //       {/* Mobile Menu Dropdown */}
-//       {menuOpen && (
-//         <div className="md:hidden mt-4 bg-white rounded-lg shadow-md px-4 py-3 space-y-2 z-40">
-//           {navLinks.map((link) => (
-//             <div key={link.name} className="space-y-1">
-//               <Link
-//                 to={link.path}
-//                 onClick={() => {
-//                   setActiveLink(link.name);
-//                   setMenuOpen(false);
-//                 }}
-//                 className="block text-gray-800 font-medium"
-//               >
-//                 {link.name}
-//               </Link>
-//               {link.subLinks && (
-//                 <div className="pl-4 space-y-1">
-//                   {link.subLinks.map((sub) => (
-//                     <Link
-//                       key={sub.name}
-//                       to={sub.path}
-//                       onClick={() => setMenuOpen(false)}
-//                       className="block text-sm text-gray-600"
-//                     >
-//                       {sub.name}
-//                     </Link>
-//                   ))}
+//       <AnimatePresence>
+//         {menuOpen && (
+//           <motion.div
+//             initial={{ opacity: 0, height: 0 }}
+//             animate={{ opacity: 1, height: "auto" }}
+//             exit={{ opacity: 0, height: 0 }}
+//             transition={{ duration: 0.3 }}
+//             className="md:hidden mt-4 bg-white rounded-lg shadow-md px-4 py-3 space-y-4 z-40 overflow-hidden"
+//           >
+//             {/* Main Navigation Links */}
+//             <div className="space-y-3">
+//               {categories.slice(0, 6).map((cat) => (
+//                 <div key={cat._id} className="space-y-1">
+//                   <button
+//                     onClick={() => {
+//                       handleCategoryClick(cat);
+//                       setMenuOpen(false);
+//                     }}
+//                     className="flex items-center text-gray-800 font-medium py-2 w-full text-left"
+//                   >
+//                     {cat.name}
+//                   </button>
 //                 </div>
-//               )}
+//               ))}
 //             </div>
-//           ))}
-//         </div>
-//       )}
+
+//             {/* Mobile Icons Row */}
+//             <div className="flex justify-around border-t border-gray-200 pt-3">
+//               <Link
+//                 to="/"
+//                 className="text-gray-900 hover:text-pink-600 flex flex-col items-center"
+//                 onClick={() => setMenuOpen(false)}
+//               >
+//                 <FaHome className="text-xl" />
+//                 <span className="text-xs mt-1">Home</span>
+//               </Link>
+//               <Link
+//                 to="/wishlist"
+//                 className="text-gray-900 hover:text-pink-600 flex flex-col items-center"
+//                 onClick={() => setMenuOpen(false)}
+//               >
+//                 <FaHeart className="text-xl" />
+//                 <span className="text-xs mt-1">Wishlist</span>
+//               </Link>
+//               <Link
+//                 to="/cart"
+//                 className="text-gray-900 hover:text-pink-600 flex flex-col items-center"
+//                 onClick={() => setMenuOpen(false)}
+//               >
+//                 <FaShoppingCart className="text-xl" />
+//                 <span className="text-xs mt-1">Cart</span>
+//               </Link>
+//               <Link
+//                 to="/account"
+//                 className="text-gray-900 hover:text-pink-600 flex flex-col items-center"
+//                 onClick={() => setMenuOpen(false)}
+//               >
+//                 <div className="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
+//                   <FaUser className="text-sm" />
+//                 </div>
+//                 <span className="text-xs mt-1">Account</span>
+//               </Link>
+//             </div>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
 //     </nav>
 //   );
 // }
 
-import { useState } from "react";
+
+
+
+import { useState, useRef, useEffect } from "react";
 import {
   FaSearch,
   FaUser,
@@ -306,47 +293,130 @@ import {
   FaTimes,
   FaHome,
   FaBars,
+  FaSignInAlt,
+  FaBox,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Navbar() {
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [activeLink, setActiveLink] = useState("Home");
-  const [openDropdown, setOpenDropdown] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
-  const navigate=useNavigate();
-  const navLinks = [
-    { name: "Kurti", path: "/kurti" },
-    { name: "Anarkali Suit", path: "/anarkali" },
-    { name: "Gown", path: "/gown" },
-    { name: "Dress Material", path: "/dress-material" },
-    { name: "Saree", path: "/saree" },
-    { name: "Leggings", path: "/leggings" },
-    // { name: "Search", path: "/search" },
-  ];
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  const filteredLinks = navLinks.filter((link) =>
-    link.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Fetch categories
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/category/get-category', {
+      withCredentials: true,
+    })
+      .then((res) => {
+        const minimalCategories = res.data.data.map(cat => ({
+          _id: cat._id,
+          name: cat.name,
+          slug: cat.name.toLowerCase().replace(/\s+/g, '-')
+        }));
+        setCategories(minimalCategories);
+      })
+      .catch((err) => {
+        console.error('Error fetching categories:', err);
+      });
+  }, []);
+
+  // const handleCategoryClick = (category) => {
+  //   setActiveLink(category.name);
+  //   navigate(`/${category.slug}`, {
+  //     state: {
+  //       categoryId: category._id,
+  //       categoryName: category.name,
+  //       fullCategory: category,
+  //       event: "user-click"
+  //     }
+  //   });
+  // };
+  const handleCategoryClick = (category) => {
+    console.log("🖱️ Clicked Category ID:", category._id); // ✅ Log here
+    setActiveLink(category.name);
+    navigate(`/${category.slug}`, {
+      state: {
+        categoryId: category._id,
+        categoryName: category.name,
+        fullCategory: category,
+        event: "user-click"
+      }
+    });
+  };
 
   return (
     <nav className="mt-5 ml-4 mr-4 md:ml-28 md:mr-2 bg-white/10 backdrop-blur-md border border-white/10 w-[95%] md:w-5/6 px-4 md:px-6 py-3 fixed top-0 z-50 text-black dark:text-white font-bold rounded-lg">
       <div className="flex items-center justify-between max-w-7xl mx-auto">
-        {/* Logo */}
         <motion.div whileHover={{ scale: 1.05 }} className="w-24 md:w-32 h-auto">
           <img
             src="src/assets/logo.jpeg"
             alt="Paradise in Love Logo"
             className="w-full h-auto object-contain"
+            onClick={()=>navigate('/')}
           />
         </motion.div>
 
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex space-x-4 relative">
+          {categories.slice(-7).map((cat) => (  // Changed from slice(0, 6) to slice(-6)
+            <motion.div
+              key={cat._id}
+              className="relative"
+              whileHover={{ scale: 1.05 }}
+            >
+              <button
+                onClick={() => handleCategoryClick(cat)}
+
+                // className={`relative px-1 py-2 text-gray-900 hover:text-pink-600 transition-colors ${activeLink === cat.name ? "text-pink-600 font-medium" : ""
+                //   }`}
+
+                className={`relative px-1 py-2 no-underline  border-none bg-none font-semibold font-[Poppins] text-greay transition-colors before:content-[''] before:ml-auto before:block before:h-[2px] before:w-0 before:bg-[#f44336] before:transition-all before:duration-500 after:content-[''] after:block after:h-[2px] after:w-0 after:bg-[#f44336] after:transition-all after:duration-500 hover:before:w-full hover:after:w-full ${activeLink === cat.name ? "text-[#f44336] font-medium" : "hover:text-[#f44336]"
+                  }`}
+
+
+              >
+                {cat.name}
+                {activeLink === cat.name && (
+                  <motion.span
+                    layoutId="navUnderline"
+                    className="absolute left-0 bottom-0 w-full h-0.5 bg-pink-600 rounded-full"
+                    transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
+                  />
+                )}
+              </button>
+            </motion.div>
+          ))}
+        </div>
+
         {/* Mobile Menu Button */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center space-x-4">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate('/search')}
+            className="text-gray-900 hover:text-pink-600"
+          >
+            <FaSearch className="text-lg" />
+          </motion.button>
+
           <button
             className="text-black dark:text-white text-xl"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -355,179 +425,166 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Desktop Nav Links */}
-        <div className="hidden md:flex space-x-4 relative">
-          {navLinks.map((link) => (
-            <motion.div
-              key={link.name}
-              className="relative"
-              onMouseEnter={() => setOpenDropdown(link.name)}
-              onMouseLeave={() => setOpenDropdown(null)}
-            >
-              <Link
-                to={link.path}
-                className={`relative px-1 py-2 text-gray-900 hover:text-pink-600 transition-colors ${
-                  activeLink === link.name ? "text-pink-600 font-medium" : ""
-                }`}
-                onClick={() => setActiveLink(link.name)}
-              >
-                {link.name}
-                {activeLink === link.name && (
-                  <motion.span
-                    layoutId="navUnderline"
-                    className="absolute left-0 bottom-0 w-full h-0.5 bg-pink-600 rounded-full"
-                    transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-                  />
-                )}
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+        {/* Desktop Right Icons */}
+        <div className="hidden md:flex items-center space-x-4">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => navigate('/search')}
+            className="text-gray-900 hover:text-pink-600"
+          >
+            <FaSearch className="text-lg" />
+          </motion.button>
 
-        {/* Right Side Icons */}
-        <div className="flex items-center space-x-3 md:space-x-4">
-          {/* Search */}
+          <motion.div whileHover={{ y: -2 }}>
+            <Link to="/" className="text-gray-900 hover:text-pink-600">
+              <FaHome className="text-xl" />
+            </Link>
+          </motion.div>
+          <motion.div whileHover={{ y: -2 }}>
+            <Link to="/wishlist" className="text-gray-900 hover:text-red-600">
+              <FaHeart className="text-xl" />
+            </Link>
+          </motion.div>
+          <motion.div whileHover={{ y: -2 }}>
+            <Link to="/cart" className="text-gray-900 hover:text-pink-600">
+              <FaShoppingCart className="text-xl" />
+            </Link>
+          </motion.div>
+
+          {/* User Dropdown */}
           <div className="relative">
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              // onClick={() => {
-              //   setShowSearch(!showSearch);
-              //   setSearchTerm("");
-              // }}
-               onClick={() => {
-                navigate('/search');
-              }}
-              className="text-gray-900 mt-2 hover:text-pink-600 focus:outline-none"
+            <motion.div
+              whileHover={{ y: -2 }}
+              onClick={() => setOpen(!open)}
+              className="cursor-pointer"
             >
-              {showSearch ? (
-                <FaTimes className="text-lg mt-[2px]" />
-              ) : (
-                <FaSearch className="text-lg mt-[2px]" />
-              )}
-            </motion.button>
-
-            <AnimatePresence>
-              {showSearch && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ type: "spring", damping: 20 }}
-                  className="absolute top-10 right-0 bg-white shadow-lg rounded-lg w-72 p-3 z-50"
-                >
-                  <input
-                    type="text"
-                    placeholder="Search categories..."
-                    className="border border-gray-300 rounded-full px-4 py-2 w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    autoFocus
-                  />
-                  {searchTerm && (
-                    <div className="mt-2">
-                      {filteredLinks.length > 0 ? (
-                        filteredLinks.map((link) => (
-                          <Link
-                            key={link.name}
-                            to={link.path}
-                            className="block px-4 py-2 rounded hover:bg-pink-100 text-sm text-gray-700"
-                            onClick={() => {
-                              setActiveLink(link.name);
-                              setShowSearch(false);
-                            }}
-                          >
-                            {link.name}
-                          </Link>
-                        ))
-                      ) : (
-                        <p className="text-sm text-gray-500 px-4 py-2">
-                          No matches found
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Icons: Home, Wishlist, Cart, User */}
-          <div className="flex items-center space-x-3 md:space-x-5">
-            <motion.div whileHover={{ y: -2 }}>
-              <Link to="/" className="text-gray-900 hover:text-pink-600">
-                <FaHome className="text-xl md:text-2xl" />
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ y: -2 }}>
-              <Link to="/wishlist" className="text-gray-900 hover:text-pink-600">
-                <FaHeart className="text-lg md:text-xl" />
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ y: -2 }}>
-              <Link to="/cart" className="text-gray-900 hover:text-pink-600">
-                <FaShoppingCart className="text-lg md:text-xl" />
-              </Link>
+              <div className="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
+                <FaUser className="text-sm" />
+              </div>
             </motion.div>
 
-            {/* User Dropdown */}
-            <div className="relative">
+            {open && (
               <motion.div
-                whileHover={{ y: -2 }}
-                onClick={() => setOpen(!open)}
-                className="cursor-pointer"
+                ref={dropdownRef}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50"
               >
-                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
-                  <FaUser className="text-sm" />
-                </div>
-              </motion.div>
-
-              {open && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute right-0 mt-2 w-40 bg-white border shadow-lg rounded-md z-50"
+                <Link
+                  to="/account"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setOpen(false)}
                 >
-                  <Link
-                    to="/account"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setOpen(false)}
-                  >
-                    Account
-                  </Link>
-                  <Link
-                    to="/userorders"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setOpen(false)}
-                  >
-                    Orders
-                  </Link>
-                </motion.div>
-              )}
-            </div>
+                  Account
+                </Link>
+                <Link
+                  to="/userorders"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setOpen(false)}
+                >
+                  Orders
+                </Link>
+                <Link
+                  to="/signin"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setOpen(false)}
+                >
+                  Sign In
+                </Link>
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden mt-4 bg-white rounded-lg shadow-md px-4 py-3 space-y-2 z-40">
-          {navLinks.map((link) => (
-            <div key={link.name} className="space-y-1">
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden mt-4 bg-white rounded-lg shadow-md px-4 py-3 space-y-4 z-40 overflow-hidden"
+          >
+            {/* Main Navigation Links */}
+            <div className="space-y-3">
+              {categories.slice(0, 6).map((cat) => (
+                <div key={cat._id} className="space-y-1">
+                  <button
+                    onClick={() => {
+                      handleCategoryClick(cat);
+                      setMenuOpen(false);
+                    }}
+                    className="flex items-center text-gray-800 font-medium py-2 w-full text-left"
+                  >
+                    {cat.name}
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile Icons Row */}
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 border-t border-gray-200 pt-3 px-2">
               <Link
-                to={link.path}
-                onClick={() => {
-                  setActiveLink(link.name);
-                  setMenuOpen(false);
-                }}
-                className="block text-gray-800 font-medium"
+                to="/"
+                className="text-gray-900 hover:text-pink-600 flex flex-col items-center p-1"
+                onClick={() => setMenuOpen(false)}
               >
-                {link.name}
+                <FaHome className="text-xl" />
+                <span className="text-xs mt-1">Home</span>
+              </Link>
+              <Link
+                to="/wishlist"
+                className="text-gray-900 hover:text-pink-600 flex flex-col items-center p-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                <FaHeart className="text-xl" />
+                <span className="text-xs mt-1">Wishlist</span>
+              </Link>
+              <Link
+                to="/cart"
+                className="text-gray-900 hover:text-pink-600 flex flex-col items-center p-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                <FaShoppingCart className="text-xl" />
+                <span className="text-xs mt-1">Cart</span>
+              </Link>
+              <Link
+                to="/userorders"
+                className="text-gray-900 hover:text-pink-600 flex flex-col items-center p-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                <FaBox className="text-xl" />
+                <span className="text-xs mt-1">Orders</span>
+              </Link>
+              <Link
+                to="/signin"
+                className="text-gray-900 hover:text-pink-600 flex flex-col items-center p-1 sm:col-span-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                <FaSignInAlt className="text-xl" />
+                <span className="text-xs mt-1">Sign In</span>
+              </Link>
+              <Link
+                to="/account"
+                className="text-gray-900 hover:text-pink-600 flex flex-col items-center p-1 sm:col-span-1"
+                onClick={() => setMenuOpen(false)}
+              >
+                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white">
+                  <FaUser className="text-sm" />
+                </div>
+                <span className="text-xs mt-1">Account</span>
               </Link>
             </div>
-          ))}
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
+
+
+
+

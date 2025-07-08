@@ -69,12 +69,13 @@ const orderSchema = new mongoose.Schema({
     product_details: {
         name: String,
         image: Array,
-        size: String, 
+        size: String,
+        color: String,
     },
     quantity: {
         type: Number,
         required: true,
-        default: 1 
+        default: 1
     },
     paymentId: {
         type: String,
@@ -99,7 +100,15 @@ const orderSchema = new mongoose.Schema({
     invoice_receipt: {
         type: String,
         default: ""
+    },
+
+
+    status: {
+        type: String,
+        enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],
+        default: 'pending'
     }
+
 }, {
     timestamps: true
 });

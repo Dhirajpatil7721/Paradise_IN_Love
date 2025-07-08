@@ -212,6 +212,7 @@ import CartProductModel from "../models/cartproduct.model.js";
 import OrderModel from "../models/order.model.js";
 import UserModel from "../models/user.model.js";
 import mongoose from "mongoose";
+import ProductModel from "../models/product.model.js"; 
 
 // Cash on Delivery Order Controller
 // export async function CashOnDeliveryOrderController(request, response) {
@@ -300,6 +301,52 @@ import mongoose from "mongoose";
 //     }
 // }
 
+//cash On Delivary
+// export async function CashOnDeliveryOrderController(request, response) {
+//     try {
+//         const userId = request.userId; // From auth middleware
+//         const { list_items, totalAmt, addressId, subTotalAmt } = request.body;
+
+//         const payload = list_items.map(el => ({
+//             userId: userId,
+//             orderId: `ORD-${new mongoose.Types.ObjectId()}`,
+//             productId: el.productId._id,
+//             product_details: {
+//                 name: el.productId.name,
+//                 image: el.productId.image,
+//                 size: el.size,
+//                 color: el.color,
+//             },
+//             quantity: el.quantity, // ✅ Mapped at top-level
+//             paymentId: "",
+//             payment_status: "CASH ON DELIVERY",
+//             delivery_address: addressId,
+//             subTotalAmt: subTotalAmt,
+//             totalAmt: totalAmt,
+//         }));
+
+
+//         const generatedOrder = await OrderModel.insertMany(payload);
+
+//         // Clear user's cart
+//         await CartProductModel.deleteMany({ userId });
+//         await UserModel.updateOne({ _id: userId }, { shopping_cart: [] });
+
+//         return response.json({
+//             message: "Order placed successfully",
+//             error: false,
+//             success: true,
+//             data: generatedOrder,
+//         });
+
+//     } catch (error) {
+//         return response.status(500).json({
+//             message: error.message || error,
+//             error: true,
+//             success: false,
+//         });
+//     }
+// }
 export async function CashOnDeliveryOrderController(request, response) {
     try {
         const userId = request.userId; // From auth middleware
@@ -313,8 +360,9 @@ export async function CashOnDeliveryOrderController(request, response) {
                 name: el.productId.name,
                 image: el.productId.image,
                 size: el.size,
+                color: el.color,
             },
-            quantity: el.quantity, // ✅ Mapped at top-level
+            quantity: el.quantity,
             paymentId: "",
             payment_status: "CASH ON DELIVERY",
             delivery_address: addressId,
@@ -322,7 +370,34 @@ export async function CashOnDeliveryOrderController(request, response) {
             totalAmt: totalAmt,
         }));
 
+        // Update stock for each product
+        for (const item of list_items) {
+            const productId = item.productId._id;
+            const quantityOrdered = item.quantity;
 
+            const product = await ProductModel.findById(productId);
+
+            if (!product) {
+                return response.status(404).json({
+                    message: `Product not found with ID: ${productId}`,
+                    error: true,
+                    success: false,
+                });
+            }
+
+            if (product.stock < quantityOrdered) {
+                return response.status(400).json({
+                    message: `Insufficient stock for product: ${product.name}`,
+                    error: true,
+                    success: false,
+                });
+            }
+
+            product.stock -= quantityOrdered;
+            await product.save();
+        }
+
+        // Create orders
         const generatedOrder = await OrderModel.insertMany(payload);
 
         // Clear user's cart
@@ -344,7 +419,6 @@ export async function CashOnDeliveryOrderController(request, response) {
         });
     }
 }
-
 
 // Get User Order Details
 export async function getOrderDetailsController(request, response) {
@@ -431,6 +505,51 @@ export const deleteOrderByOrderId = async (req, res) => {
     });
   }
 };
+
+//Status Update 
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { orderId, status } = req.body; // both from body
+
+    if (!orderId || !status) {
+      return res.status(400).json({
+        success: false,
+        message: "orderId and status are required in request body",
+      });
+    }
+
+    const validStatus = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'];
+    if (!validStatus.includes(status)) {
+      return res.status(400).json({ success: false, message: "Invalid status" });
+    }
+
+    const updatedOrder = await OrderModel.findOneAndUpdate(
+      { orderId },
+      { status },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "No order found with the given orderId",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+      data: updatedOrder,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error while updating order status",
+      error: error.message,
+    });
+  }
+};
+
 
 
 

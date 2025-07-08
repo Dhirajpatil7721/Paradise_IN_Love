@@ -13,7 +13,7 @@ const RefundPolicy = () => {
       <section style={styles.section}>
         <h2 style={styles.subtitle}>Eligibility for Refunds</h2>
         <ul style={styles.list}>
-          <li>Refunds are applicable only on products returned within <strong>30 days</strong> of purchase.</li>
+          <li>Refunds are applicable only on products returned within <strong>7 days</strong> of purchase.</li>
           <li>The product must be <strong>unused</strong>, in original packaging, and with all tags attached.</li>
           <li>Proof of purchase is required to process refunds.</li>
         </ul>
@@ -32,14 +32,14 @@ const RefundPolicy = () => {
       <section style={styles.section}>
         <h2 style={styles.subtitle}>How to Request a Refund</h2>
         <p>
-          To request a refund, please contact our customer support within <strong>30 days</strong> of delivery with your order details.
+          To request a refund, please contact our customer support within <strong>7days</strong> of delivery with your order details.
         </p>
       </section>
 
       <section style={styles.section}>
         <h2 style={styles.subtitle}>Processing Time</h2>
         <p>
-          Once we receive your returned product, please allow <strong>7-10 business days</strong> for the refund to be processed.
+          Once we receive your returned product, please allow <strong>3-4 business days</strong> for the refund to be processed.
         </p>
       </section>
 

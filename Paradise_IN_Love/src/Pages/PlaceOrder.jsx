@@ -287,7 +287,7 @@ import {
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 const PlaceOrder = () => {
   const location = useLocation();
@@ -304,7 +304,7 @@ const PlaceOrder = () => {
     }
   }, [orderData]);
   console.log("Order Data received:", orderData.quantity);
-  
+
   useEffect(() => {
     axios
       .get('http://localhost:8080/api/address/get', { withCredentials: true })
@@ -336,12 +336,14 @@ const PlaceOrder = () => {
           productId: {
             _id: product._id,
             name: product.name,
-            image: product.imageUrl || '',
+            // image: product.imageUrl || '',
+              image: product.image[0] || '',  
             price: product.price,
             discount: product.discount || 0
           },
           size: orderData.size,
-          quantity: orderData.quantity
+          quantity: orderData.quantity,
+          color: orderData.color
         }
       ],
       subTotalAmt: product.price * orderData.quantity,
@@ -389,6 +391,7 @@ const PlaceOrder = () => {
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8"
     >
+      <ToastContainer />
       <div className="mt-10 max-w-4xl mx-auto">
         <motion.div
           initial={{ y: -20 }}
@@ -444,7 +447,9 @@ const PlaceOrder = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button type="button" className="flex flex-col items-center p-4 border-2 border-gray-200 rounded-xl hover:border-pink-400 transition-all">
-                  <FiDollarSign className="text-2xl text-gray-600 mb-2" />
+                  {/* <FiDollarSign className="text-2xl text-gray-600 mb-2" /> */}
+                  <span className="text-2xl text-gray-600 mb-2 font-semibold">₹</span>
+
                   <span>Cash on Delivery</span>
                 </button>
                 <button type="button" disabled className="flex flex-col items-center p-4 border-2 border-gray-200 rounded-xl opacity-50 cursor-not-allowed">
@@ -493,11 +498,11 @@ const PlaceOrder = () => {
               <div className="bg-gray-50 rounded-xl p-4 space-y-2">
                 <div className="flex justify-between border-b py-2">
                   <span>MRP (per item)</span>
-                  <span className="text-l font-medium ">₹{product.price}</span>
+                  <span className="text-l font-medium ">₹{product.mrp}</span>
                 </div>
                 <div className="flex justify-between border-b py-2">
                   <span>Selling Price (per item)</span>
-                  <span className="font-medium text-gray-700">₹{product.mrp}</span>
+                  <span className="font-medium text-gray-700">₹{product.price}</span>
                 </div>
                 <div className="flex justify-between border-b py-2">
                   <span>Discount</span>
@@ -513,10 +518,14 @@ const PlaceOrder = () => {
                   <span className="text-green-700 font-medium">FREE</span>
                 </div>
                 <div className="flex justify-between border-b py-2">
+                  <span>Colour</span>
+                  <span className="text-green-700 font-medium">{orderData.color}</span>
+                </div>
+                <div className="flex justify-between border-b py-2">
                   <span>You Save (on {orderData.quantity} item{orderData.quantity > 1 ? 's' : ''})</span>
                   <span className="text-green-600 font-medium">
-                    ₹{product.mrp < product.price
-                      ? ((product.price - product.mrp) * orderData.quantity).toFixed(2)
+                    ₹{product.price < product.mrp
+                      ? ((product.mrp - product.price) * orderData.quantity).toFixed(2)
                       : 0}
                   </span>
                 </div>

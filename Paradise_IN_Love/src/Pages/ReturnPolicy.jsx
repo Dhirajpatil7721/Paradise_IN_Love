@@ -16,7 +16,7 @@ const ReturnPolicy = () => {
           Return Eligibility
         </h2>
         <ul className="list-disc list-inside space-y-2 text-lg">
-          <li>Items must be returned within <strong>30 days</strong> from the date of delivery.</li>
+          <li>Items must be returned within <strong>7 days</strong> from the date of delivery.</li>
           <li>Products must be unused, in their original packaging, and in the same condition as when you received them.</li>
           <li>A receipt or proof of purchase is required for all returns.</li>
         </ul>
@@ -39,7 +39,7 @@ const ReturnPolicy = () => {
           Return Process
         </h2>
         <p className="text-lg leading-relaxed">
-          To initiate a return, please contact our customer service team within <strong>30 days</strong> with your order details and reason for return.
+          To initiate a return, please contact our customer service team within <strong>7 days</strong> with your order details and reason for return.
         </p>
       </section>
 

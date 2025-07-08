@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { FiLogOut, FiX, FiMenu, FiHome, FiShoppingBag, FiPlus, FiUsers, FiSettings } from "react-icons/fi";
+import { FiLogOut, FiX, FiMenu, FiHome, FiShoppingBag, FiPlus, FiUsers, FiSettings, FiLayers } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 
 const Logout = () => {
@@ -15,79 +16,96 @@ const Logout = () => {
 
   // Simple active link checker
   const isActiveLink = (path) => (location.pathname === path ? 'bg-gray-700 text-white shadow-md'
-      : 'hover:bg-gray-700 text-white');
+    : 'hover:bg-gray-700 text-white');
 
-  useEffect(() => {
-    // Clear any session/auth tokens
-    localStorage.removeItem("adminToken");
+  const logoutclick = async () => {
+    try {
+      await fetch("http://localhost:8080/api/user/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      localStorage.removeItem("adminToken");
+      toast.success("Logged out successfully");
+      setTimeout(() => {
 
-    // Delay to show logout message, then redirect
-    const timer = setTimeout(() => {
-      navigate("/admin/login");
-    }, 2500);
+        navigate("/");
+      }, 500);
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error("Failed to logout");
+    }
+  };
 
-    return () => clearTimeout(timer);
-  }, [navigate]);
+useEffect(() => {
+  logoutclick();
+}, []);
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">
 
-    {/* Sidebar */}
-          <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} fixed md:relative inset-y-0 left-0 w-64 bg-gray-800/90 text-white transition-transform duration-300 ease-in-out flex flex-col z-30`}>
-            <div className="p-4 flex items-center justify-between border-b border-pink-500">
-              <div className="flex items-center">
-                <div className="bg-white p-1 rounded-lg mr-3">
-                  <div className="bg-pink-500 w-8 h-8 rounded-md flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">P</span>
-                  </div>
-                </div>
-                <h1 className="text-xl font-bold tracking-wide">Paradies in Love</h1>
+      {/* Sidebar */}
+      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} fixed md:relative inset-y-0 left-0 w-64 bg-gray-800/90 text-white transition-transform duration-300 ease-in-out flex flex-col z-30`}>
+        <div className="p-4 flex items-center justify-between border-b border-pink-500">
+          <div className="flex items-center">
+            <div className="bg-white p-1 rounded-lg mr-3">
+              <div className="bg-pink-500 w-8 h-8 rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-xl">P</span>
               </div>
-              <button 
-                onClick={toggleSidebar}
-                className="p-2 rounded-lg hover:bg-gray-700 transition-all md:hidden"
-              >
-                <FiX size={20} />
-              </button>
             </div>
-    
-            <nav className="mt-6 flex flex-col px-2 flex-grow">
-              <Link
-                to="/dashboard"
-                className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/dashboard')}`}
-              >
-                <FiHome className="mr-3" size={20} />
-                <span className="font-medium">Dashboard</span>
-              </Link>
-              <Link
-                to="/orders"
-                className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/orders')}`}
-              >
-                <FiShoppingBag className="mr-3" size={20} />
-                <span className="font-medium">Orders</span>
-              </Link>
-              <Link
-                to="/add-product"
-                className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/add-product')}`}
-              >
-                <FiPlus className="mr-3" size={20} />
-                <span className="font-medium">Add Product</span>
-              </Link>
-              <Link
-                to="/customers"
-                className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/customers')}`}
-              >
-                <FiUsers className="mr-3" size={20} />
-                <span className="font-medium">Customers</span>
-              </Link>
-              <Link
-                to="/logout"
-                className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/logout')}`}
-              >
-                <FiLogOut className="mr-3" size={20} />
-                <span className="font-medium">Logout</span>
-              </Link>
-            </nav>
+            <h1 className="text-xl font-bold tracking-wide">Paradies in Love</h1>
+          </div>
+          <button
+            onClick={toggleSidebar}
+            className="p-2 rounded-lg hover:bg-gray-700 transition-all md:hidden"
+          >
+            <FiX size={20} />
+          </button>
+        </div>
+
+        <nav className="mt-6 flex flex-col px-2 flex-grow">
+          <Link
+            to="/dashboard"
+            className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/dashboard')}`}
+          >
+            <FiHome className="mr-3" size={20} />
+            <span className="font-medium">Dashboard</span>
+          </Link>
+          <Link
+            to="/orders"
+            className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/orders')}`}
+          >
+            <FiShoppingBag className="mr-3" size={20} />
+            <span className="font-medium">Orders</span>
+          </Link>
+          <Link
+            to="/add-product"
+            className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/add-product')}`}
+          >
+            <FiPlus className="mr-3" size={20} />
+            <span className="font-medium">Add Product</span>
+          </Link>
+          <Link
+            to="/category-management"
+            className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/category-management')}`}
+          >
+            <FiLayers className="mr-3" size={20} />
+            <span className="font-medium">Category Management</span>
+          </Link>
+          <Link
+            to="/customers"
+            className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/customers')}`}
+          >
+            <FiUsers className="mr-3" size={20} />
+            <span className="font-medium">Customers</span>
+          </Link>
+          <Link
+            to="/logout"
+            className={`px-4 py-3 cursor-pointer flex items-center rounded-lg mx-2 my-1 transition-all ${isActiveLink('/logout')}`}
+          >
+            <FiLogOut className="mr-3" size={20} />
+            <span onClick={logoutclick} className="font-medium">Logout</span>
+          </Link>
+        </nav>
       </div>
 
       {/* Main Content */}

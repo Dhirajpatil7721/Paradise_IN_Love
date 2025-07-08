@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { FaHeart, FaShoppingCart, FaBolt, FaWhatsapp, FaStar, FaRegHeart } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-
+ 
 const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImage, setCurrentImage] = useState(product.image1);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     let timeout;
     if (isHovered) {
@@ -60,9 +60,8 @@ const ProductCard = ({ product }) => {
       <motion.button
         whileTap={{ scale: 0.8 }}
         onClick={handleWishlist}
-        className={`absolute top-2 right-2 z-10 p-1.5 rounded-full shadow-md ${
-          isWishlisted ? 'bg-pink-300 text-red-500' : 'bg-white text-gray-400'
-        }`}
+        className={`absolute top-2 right-2 z-10 p-1.5 rounded-full shadow-md ${isWishlisted ? 'bg-pink-300 text-red-500' : 'bg-white text-gray-400'
+          }`}
       >
         {isWishlisted ? <FaHeart size={16} /> : <FaRegHeart size={16} />}
       </motion.button>
@@ -134,7 +133,9 @@ const ProductCard = ({ product }) => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={handleWhatsapp}
+            onClick={() => {
+             window.open("https://wa.me/9730020567?text=Hi, I have an inquiry.", "_blank")
+            }}
             className="flex items-center justify-center bg-green-600 hover:bg-green-700 text-white p-1.5 rounded-md"
           >
             <FaWhatsapp size={12} />

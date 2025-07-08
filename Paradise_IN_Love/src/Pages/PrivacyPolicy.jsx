@@ -67,9 +67,9 @@ const PrivacyPolicy = () => {
         </p>
       </section>
 
-      <p style={styles.footerNote}>
+      {/* <p style={styles.footerNote}>
         Last updated: <strong>May 2025</strong>
-      </p>
+      </p> */}
     </div>
   );
 };

@@ -1,59 +1,108 @@
 import ProductModel from "../models/product.model.js";
 
-export const createProductController = async (request, response) => {
-    try {
-        const { 
-            name,
-            image,
-            category,
-            subCategory,
-            unit,
-            stock,
-            price,
-            mrp, 
-            discount,
-            description,
-            more_details,
-        } = request.body;
+// export const createProductController = async (request, response) => {
+//     try {
+//         const { 
+//             name,
+//             image,
+//             category,
+//             subCategory,
+//             unit,
+//             stock,
+//             price,
+//             mrp, 
+//             discount,
+//             description,
+//             more_details,
+//         } = request.body;
 
-        if (!name || !image[0] || !category[0] || !subCategory[0] || !unit || !price || !description) {
-            return response.status(400).json({
-                message: "Enter required fields",
-                error: true,
-                success: false
-            });
-        }
+//         if (!name || !image[0] || !category[0] || !subCategory[0] || !unit || !price || !description) {
+//             return response.status(400).json({
+//                 message: "Enter required fields",
+//                 error: true,
+//                 success: false
+//             });
+//         }
 
-        const product = new ProductModel({
-            name,
-            image,
-            category,
-            subCategory,
-            unit,
-            stock,
-            price,
-            mrp, // ✅ Added here
-            discount,
-            description,
-            more_details,
-        });
+//         const product = new ProductModel({
+//             name,
+//             image,
+//             category,
+//             subCategory,
+//             unit,
+//             stock,
+//             price,
+//             mrp, // ✅ Added here
+//             discount,
+//             description,
+//             more_details,
+//         });
 
-        const saveProduct = await product.save();
+//         const saveProduct = await product.save();
 
-        return response.json({
-            message: "Product Created Successfully",
-            data: saveProduct,
-            error: false,
-            success: true
-        });
+//         return response.json({
+//             message: "Product Created Successfully",
+//             data: saveProduct,
+//             error: false,
+//             success: true
+//         });
 
-    } catch (error) {
-        return response.status(500).json({
-            message: error.message || error,
-            error: true,
-            success: false
-        });
-    }
+//     } catch (error) {
+//         return response.status(500).json({
+//             message: error.message || error,
+//             error: true,
+//             success: false
+//         });
+//     }
+// };
+export const createProductController = async (req, res) => {
+  try {
+    const {
+      name,
+      image,
+      category,
+      subCategory,
+      unit,
+      stock,
+      price,
+      mrp,
+      discount,
+      description, // <-- this should be an array
+      more_details,
+      publish,
+    } = req.body;
+
+    const newProduct = new ProductModel({
+      name,
+      image,
+      category,
+      subCategory,
+      unit,
+      stock,
+      price,
+      mrp,
+      discount,
+      description: Array.isArray(description) ? description : [description], // ensure it's an array
+      more_details,
+      publish,
+    });
+
+    const savedProduct = await newProduct.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Product created successfully",
+      data: savedProduct,
+    });
+
+  } catch (error) {
+    console.error("Product creation error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to create product",
+      error: error.message,
+    });
+  }
 };
 
 export const getProductController = async(request,response)=>{
