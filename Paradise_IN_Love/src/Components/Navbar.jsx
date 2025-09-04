@@ -299,6 +299,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import {paradieselogo} from '../assets/logo.jpeg'
 
 export default function Navbar() {
   const [activeLink, setActiveLink] = useState("Home");
@@ -368,7 +369,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <motion.div whileHover={{ scale: 1.05 }} className="w-24 md:w-32 h-auto">
           <img
-            src="src/assets/logo.jpeg"
+            src={paradieselogo}
             alt="Paradise in Love Logo"
             className="w-full h-auto object-contain"
             onClick={()=>navigate('/')}

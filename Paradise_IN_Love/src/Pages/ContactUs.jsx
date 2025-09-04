@@ -27,26 +27,26 @@ const ContactUs = () => {
             <div className="bg-white rounded-xl shadow-md p-6 md:p-8 h-full">
               <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-6">Contact Information</h3>
               <div className="space-y-6">
-              {/* Address */}
-<div className="flex items-start">
-  <div className="bg-pink-100 p-3 rounded-full mr-4">
-    <svg className="w-6 h-6 text-pink-500 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  </div>
-  <div>
-    <h4 className="text-lg font-semibold text-gray-800 mb-1">Our Location</h4>
-    <a
-      href="https://www.google.com/maps?q=123+Fashion+Avenue,+Suite+456,+New+York,+NY+10001"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-pink-500 hover:underline"
-    >
-     1154/55 Kasba peth behind Sattoti Police station near laxmi journal store
-    </a>
-  </div>
-</div>
+                {/* Address */}
+                <div className="flex items-start">
+                  <div className="bg-pink-100 p-3 rounded-full mr-4">
+                    <svg className="w-6 h-6 text-pink-500 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-800 mb-1">Our Location</h4>
+                    <a
+                      href="https://www.google.com/maps?q=123+Fashion+Avenue,+Suite+456,+New+York,+NY+10001"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-pink-500 hover:underline"
+                    >
+                      1154/55 Kasba peth behind Sattoti Police station near laxmi journal store
+                    </a>
+                  </div>
+                </div>
 
                 {/* Phone */}
                 <div className="flex items-start">
@@ -107,20 +107,28 @@ const ContactUs = () => {
           </div>
 
           {/* Map Section */}
-          <div className="w-full lg:w-1/2">
-            <div className="bg-white rounded-xl shadow-md overflow-hidden h-full">
-              <div className="h-96 w-full bg-gray-200 flex items-center justify-center">
-                <div className="text-center p-6">
-                  <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <p className="mt-4 text-gray-600">123 Fashion Avenue, New York, NY 10001</p>
-                  <p className="text-sm text-gray-500 mt-2">Interactive map will appear here</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="w-full lg:w-1/2">
+  <div className="bg-white rounded-xl shadow-md overflow-hidden h-full">
+    <div className="h-96 w-full">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15132.721537903484!2d73.8400500078125!3d18.520748900000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c06505698a57%3A0xef12c620226c2205!2sKasba%20Peth%20Police%20Station!5e0!3m2!1sen!2sin!4v1756123339663!5m2!1sen!2sin"
+        width="100%"
+        height="100%"
+        style={{ border: 0 }}
+        allowFullScreen=""
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    <div className="p-6 text-center">
+      <p className="mt-2 text-gray-600">
+        123 Fashion Avenue, New York, NY 10001
+      </p>
+      <p className="text-sm text-gray-500 mt-1">Find us on Google Maps</p>
+    </div>
+  </div>
+</div>
+
 
         </div>
       </section>

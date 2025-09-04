@@ -16,6 +16,7 @@ import addressRouter from './route/address.route.js'
 import orderRouter from './route/order.route.js'
 import reviewproduct from './route/Review.route.js'
 import wishlistrouter from './route/wishlist.route.js'
+import createAdmin from './createAdmin.js'
 
 
 const app = express()
@@ -43,13 +44,23 @@ response.json({
 })
 })
 
-connectDB().then(()=>{
+// connectDB().then(()=>{
     
-    app.listen(PORT,()=>{
-        console.log("Server is running " ,PORT);
+//     app.listen(PORT,()=>{
+//         console.log("Server is running " ,PORT);
         
-    })
-})
+//     })
+// })
+
+
+// Connect DB & Create Default Admin
+connectDB().then(async () => {
+  await createAdmin(); // <-- Call here
+
+  app.listen(PORT, () => {
+    console.log("🚀 Server is running on PORT", PORT);
+  });
+});
 
 app.use('/api/user' ,userRouter)
 app.use('/api/category' ,categoryRouter)

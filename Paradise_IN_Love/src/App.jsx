@@ -83,7 +83,7 @@
 //         <Route path="/logout" element={<Logout/>} />
 //         <Route path="/orders" element={<Orders/>} />
 //         {/* <Route path="/sidebarLayout" element={<SidebarLayout/>} /> */}
-        
+
 
 
 
@@ -142,59 +142,59 @@ import Logout from './Admin/Logout';
 import Orders from './Admin/Orders';
 import UpdateProduct_Popup from './Pages/UpdateProduct_Popup';
 import CategoryManagement from './Admin/CategoryManagement';
-import ScrollToTop  from '../src/Components/ScrollToTop'
+import ScrollToTop from '../src/Components/ScrollToTop'
 import CategoryPage from './Components/CategoryPage';
 
 function App() {
   return (
     <>
-    <ScrollToTop/> 
-    <Routes>
-      <Route element={<MainLayout />}>
-        {/* Public routes (will show Navbar and Footer) */}
-        <Route path="/" element={<Home />} />
-        {/* <Route path="/saree" element={<Saree />} /> */}
-        {/* <Route path="/kurti" element={<Kurti />} /> */}
-        {/* <Route path="/leggings" element={<Leggings />} /> */}
-        {/* <Route path="/dress-material" element={<DressMaterial />} /> */}
-        {/* <Route path="/gown" element={<Gown />} />
+      <ScrollToTop />
+      <Routes>
+        <Route element={<MainLayout />}>
+          {/* Public routes (will show Navbar and Footer) */}
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/saree" element={<Saree />} /> */}
+          {/* <Route path="/kurti" element={<Kurti />} /> */}
+          {/* <Route path="/leggings" element={<Leggings />} /> */}
+          {/* <Route path="/dress-material" element={<DressMaterial />} /> */}
+          {/* <Route path="/gown" element={<Gown />} />
         <Route path="/Anarkali" element={<Anarkali />} />
         <Route path="/causal-suit" element={<Causal />} /> */}
-        <Route path="/account" element={<Account />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/buynow" element={<Buynow />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/placeorder" element={<PlaceOrder />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/refund-policy" element={<RefundPolicy />} />
-        <Route path="/return-policy" element={<ReturnPolicy />} />
-        <Route path="/disclaimer" element={<Disclaimer />} />
-        <Route path="/terms-and-conditions" element={<TermsConditions />} />
-        <Route path="/shopnow" element={<ShopNow />} />
-        <Route path="/userorders" element={<UserOrders />} />
-        <Route path="/:categorySlug" element={<CategoryPage />} /> 
+          <Route path="/account" element={<Account />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/buynow" element={<Buynow />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/placeorder" element={<PlaceOrder />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/return-policy" element={<ReturnPolicy />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
+          <Route path="/terms-and-conditions" element={<TermsConditions />} />
+          <Route path="/shopnow" element={<ShopNow />} />
+          <Route path="/userorders" element={<UserOrders />} />
+          <Route path="/:categorySlug" element={<CategoryPage />} />
 
-        {/* Admin routes (will hide Navbar and Footer) */}
-        <Route path="/add-product" element={<AdminProductAddPage />} />
-        <Route path="/customers" element={<Customers />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        {/* <Route path="/filterPage" element={<FilterPage />} />
+          {/* Admin routes (will hide Navbar and Footer) */}
+          <Route path="/add-product" element={<AdminProductAddPage />} />
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/filterPage" element={<FilterPage />} />
         <Route path="/header" element={<Header />} />
         <Route path="/helpCenter" element={<HelpCenter />} /> */}
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/edit-popup" element={<UpdateProduct_Popup/>} />
-        <Route path="/category-management" element={<CategoryManagement/>} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/edit-popup" element={<UpdateProduct_Popup />} />
+          <Route path="/category-management" element={<CategoryManagement />} />
 
-        {/* Auth routes (will hide Navbar and Footer) */}
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/forgot-password" element={<Forgot />} />
-      </Route>
-    </Routes>
+          {/* Auth routes (will hide Navbar and Footer) */}
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<Forgot />} />
+        </Route>
+      </Routes>
     </>
   );
 }

@@ -287,6 +287,40 @@ export async  function uploadAvatar(request,response){
     }
 }
 
+//Update the User Roll
+export async function updateUserRole(req, res) {
+    try {
+        const { userId, role } = req.body;
+
+        if (!userId || !["ADMIN", "USER"].includes(role)) {
+            return res.status(400).json({
+                message: "Valid userId and role (ADMIN or USER) are required",
+                error: true,
+                success: false
+            });
+        }
+
+        const updated = await UserModel.updateOne(
+            { _id: userId },
+            { role: role }
+        );
+
+        return res.json({
+            message: "User role updated successfully",
+            error: false,
+            success: true,
+            data: updated
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
+        });
+    }
+}
+
 //update user details
 export async function updateUserDetails(request,response){
     try {
