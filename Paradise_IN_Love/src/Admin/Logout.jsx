@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 const Logout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const API_URL = import.meta.env.VITE_RENDER;
 
   // Sidebar open state
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -20,7 +21,7 @@ const Logout = () => {
 
   const logoutclick = async () => {
     try {
-      await fetch("http://localhost:8080/api/user/logout", {
+      await fetch(`${API_URL}/user/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -36,9 +37,9 @@ const Logout = () => {
     }
   };
 
-useEffect(() => {
-  logoutclick();
-}, []);
+  useEffect(() => {
+    logoutclick();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-pink-50 to-purple-50">

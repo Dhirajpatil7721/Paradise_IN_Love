@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const navigate = useNavigate();
-  
+
   const [userdata, setUserdata] = useState({ name: "", email: "", mobile: "", avatar: "" });
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(0);
@@ -30,21 +30,23 @@ export default function Profile() {
     pincode: "",
     country: "",
   });
-  
+
   const [editMode, setEditMode] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [editUser, setEditUser] = useState({ name: "", email: "", mobile: "" });
-  
+
   // Validation states
   const [nameValid, setNameValid] = useState(true);
   const [userMobileValid, setUserMobileValid] = useState(true);
   const [addressMobileValid, setAddressMobileValid] = useState(true);
 
+  const API_URL = import.meta.env.VITE_RENDER;
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const addressResponse = await fetch("http://localhost:8080/api/address/get", {
+        const addressResponse = await fetch(`${API_URL}/address/get`, {
           method: "GET",
           credentials: "include",
         });
@@ -68,9 +70,9 @@ export default function Profile() {
           });
           setEditMode(true);
           setIsAdding(true);
-      
+
           try {
-            const userResponse = await fetch("http://localhost:8080/api/user/profile", {
+            const userResponse = await fetch(`${API_URL}/user/profile`, {
               method: "GET",
               credentials: "include",
             });
@@ -108,7 +110,7 @@ export default function Profile() {
 
   const fetchUser = async (userId) => {
     try {
-      const response = await fetch("http://localhost:8080/api/user/getall", {
+      const response = await fetch(`${API_URL}/user/getall`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -133,31 +135,31 @@ export default function Profile() {
   const handleSelectAddress = (idx) => {
     setSelectedAddressIndex(idx);
     setCurrentAddress(addresses[idx]);
- 
+
     if (addresses[idx]?.userId !== userdata?.id) {
-        fetchUser(addresses[idx].userId);
+      fetchUser(addresses[idx].userId);
     }
     setEditMode(false);
     setIsAdding(false);
     setSelectedFile(null);
   };
-  
+
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Validate address mobile
     if (name === "mobile") {
       const isValid = /^\d{10}$/.test(value);
       setAddressMobileValid(isValid);
     }
-    
+
     setCurrentAddress((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleUserChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Validate user fields
     if (name === "name") {
       const isValid = /^[a-zA-Z\s]*$/.test(value);
@@ -166,7 +168,7 @@ export default function Profile() {
       const isValid = /^\d{0,10}$/.test(value);
       setUserMobileValid(isValid);
     }
-    
+
     setEditUser((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -175,28 +177,28 @@ export default function Profile() {
     setNameValid(true);
     setUserMobileValid(true);
     setAddressMobileValid(true);
-    
+
     // Name validation
     if (!/^[a-zA-Z\s]+$/.test(editUser.name)) {
       toast.error("Name should contain only letters and spaces");
       setNameValid(false);
       return;
     }
-    
+
     // User mobile validation
     if (!/^\d{10}$/.test(editUser.mobile)) {
       toast.error("User mobile number should be exactly 10 digits");
       setUserMobileValid(false);
       return;
     }
-    
+
     // Address mobile validation
     if (!/^\d{10}$/.test(currentAddress.mobile)) {
       toast.error("Address mobile number should be exactly 10 digits");
       setAddressMobileValid(false);
       return;
     }
-    
+
     // Basic validation
     if (!editUser.name || !editUser.email || !editUser.mobile) {
       toast.error("Please fill in all user details (Name, Email, Mobile).");
@@ -210,7 +212,7 @@ export default function Profile() {
     try {
       // Update user data
       const userUpdateResponse = await fetch(
-        "http://localhost:8080/api/user/update-user",
+        `${API_URL}/user/update-user`,
         {
           method: "PUT",
           credentials: "include",
@@ -239,14 +241,14 @@ export default function Profile() {
       toast.error("Error updating user info: " + error.message);
     }
     const addressPayload = {
-        ...currentAddress,
-        userId: currentAddress.userId || userdata?._id || userdata?.id,
+      ...currentAddress,
+      userId: currentAddress.userId || userdata?._id || userdata?.id,
     };
 
 
     if (isAdding) {
       try {
-        const response = await fetch("http://localhost:8080/api/address/create", {
+        const response = await fetch(`${API_URL}/address/create`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -273,7 +275,7 @@ export default function Profile() {
       }
     } else {
       try {
-        const response = await fetch("http://localhost:8080/api/address/update", {
+        const response = await fetch(`${API_URL}/address/update`, {
           method: "PUT",
           credentials: "include",
           headers: {
@@ -301,7 +303,7 @@ export default function Profile() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/user/logout", {
+      const res = await fetch(`${API_URL}/user/logout`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -342,7 +344,7 @@ export default function Profile() {
     if (!window.confirm("Are you sure you want to delete this address?")) return;
 
     try {
-      const res = await fetch("http://localhost:8080/api/address/disable", {
+      const res = await fetch(`${API_URL}/address/disable`, {
         method: "DELETE",
         credentials: "include",
         headers: {
@@ -378,31 +380,31 @@ export default function Profile() {
     }
   };
 
- const handlePhotoUpload = async () => {
-  if (!selectedFile) return toast.error("No file selected");
+  const handlePhotoUpload = async () => {
+    if (!selectedFile) return toast.error("No file selected");
 
-  const formData = new FormData();
-  formData.append("avatar", selectedFile); 
+    const formData = new FormData();
+    formData.append("avatar", selectedFile);
 
-  try {
-    const response = await fetch("http://localhost:8080/api/user/upload-avatar", {
-      method: "PUT",
-      credentials: "include", 
-      body: formData,
-    });
+    try {
+      const response = await fetch(`${API_URL}/user/upload-avatar`, {
+        method: "PUT",
+        credentials: "include",
+        body: formData,
+      });
 
-    const result = await response.json();
-    if (response.ok && result.success) {
-      toast.success("Profile photo updated");
-      setUserdata((prev) => ({ ...prev, avatar: result.data.avatar }));
-      setSelectedFile(null);
-    } else {
-      toast.error(result.message || "Failed to upload avatar");
+      const result = await response.json();
+      if (response.ok && result.success) {
+        toast.success("Profile photo updated");
+        setUserdata((prev) => ({ ...prev, avatar: result.data.avatar }));
+        setSelectedFile(null);
+      } else {
+        toast.error(result.message || "Failed to upload avatar");
+      }
+    } catch (err) {
+      toast.error("Upload error: " + err.message);
     }
-  } catch (err) {
-    toast.error("Upload error: " + err.message);
-  }
-};
+  };
 
   return (
     <div className="max-w-full sm:max-w-4xl mx-auto mt-20 mb-10 p-4 sm:p-8 rounded-xl shadow-lg border bg-white space-y-8">
@@ -479,9 +481,8 @@ export default function Profile() {
             value={editMode ? editUser.name : userdata.name}
             disabled={!editMode && userdata.name !== ""}
             onChange={handleUserChange}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode || userdata.name === "" ? "bg-white" : "bg-gray-50"
-            } ${!nameValid ? "border-red-500" : ""}`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode || userdata.name === "" ? "bg-white" : "bg-gray-50"
+              } ${!nameValid ? "border-red-500" : ""}`}
           />
           {!nameValid && (
             <p className="text-red-500 text-sm mt-1">
@@ -500,9 +501,8 @@ export default function Profile() {
             value={editMode ? editUser.email : userdata.email}
             disabled={!editMode && userdata.email !== ""}
             onChange={handleUserChange}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode || userdata.email === "" ? "bg-white" : "bg-gray-50"
-            }`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode || userdata.email === "" ? "bg-white" : "bg-gray-50"
+              }`}
           />
         </div>
 
@@ -517,9 +517,8 @@ export default function Profile() {
             disabled={!editMode && userdata.mobile !== ""}
             onChange={handleUserChange}
             maxLength={10}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode || userdata.mobile === "" ? "bg-white" : "bg-gray-50"
-            } ${!userMobileValid ? "border-red-500" : ""}`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode || userdata.mobile === "" ? "bg-white" : "bg-gray-50"
+              } ${!userMobileValid ? "border-red-500" : ""}`}
           />
           {!userMobileValid && (
             <p className="text-red-500 text-sm mt-1">
@@ -539,9 +538,8 @@ export default function Profile() {
             value={currentAddress.address_line || ""}
             disabled={!editMode}
             onChange={handleAddressChange}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode ? "bg-white" : "bg-gray-50"
-            }`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode ? "bg-white" : "bg-gray-50"
+              }`}
           />
         </div>
 
@@ -556,9 +554,8 @@ export default function Profile() {
             disabled={!editMode}
             onChange={handleAddressChange}
             maxLength={10}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode ? "bg-white" : "bg-gray-50"
-            } ${!addressMobileValid ? "border-red-500" : ""}`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode ? "bg-white" : "bg-gray-50"
+              } ${!addressMobileValid ? "border-red-500" : ""}`}
           />
           {!addressMobileValid && (
             <p className="text-red-500 text-sm mt-1">
@@ -575,9 +572,8 @@ export default function Profile() {
             value={currentAddress.city || ""}
             disabled={!editMode}
             onChange={handleAddressChange}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode ? "bg-white" : "bg-gray-50"
-            }`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode ? "bg-white" : "bg-gray-50"
+              }`}
           />
         </div>
 
@@ -589,9 +585,8 @@ export default function Profile() {
             value={currentAddress.state || ""}
             disabled={!editMode}
             onChange={handleAddressChange}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode ? "bg-white" : "bg-gray-50"
-            }`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode ? "bg-white" : "bg-gray-50"
+              }`}
           />
         </div>
 
@@ -603,9 +598,8 @@ export default function Profile() {
             value={currentAddress.pincode || ""}
             disabled={!editMode}
             onChange={handleAddressChange}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode ? "bg-white" : "bg-gray-50"
-            }`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode ? "bg-white" : "bg-gray-50"
+              }`}
           />
         </div>
 
@@ -617,9 +611,8 @@ export default function Profile() {
             value={currentAddress.country || ""}
             disabled={!editMode}
             onChange={handleAddressChange}
-            className={`w-full px-3 py-2 border rounded-lg ${
-              editMode ? "bg-white" : "bg-gray-50"
-            }`}
+            className={`w-full px-3 py-2 border rounded-lg ${editMode ? "bg-white" : "bg-gray-50"
+              }`}
           />
         </div>
       </div>
@@ -646,9 +639,9 @@ export default function Profile() {
                 });
               } else {
                 setCurrentAddress({
-                    userId: userdata?._id || userdata?.id || "",
-                    mobile: userdata?.mobile || "",
-                    address_line: "", city: "", state: "", pincode: "", country: "",
+                  userId: userdata?._id || userdata?.id || "",
+                  mobile: userdata?.mobile || "",
+                  address_line: "", city: "", state: "", pincode: "", country: "",
                 });
                 setEditUser({
                   name: userdata.name || "",
@@ -675,11 +668,10 @@ export default function Profile() {
             {addresses.map((addr, idx) => (
               <div
                 key={addr._id || idx}
-                className={`cursor-pointer border rounded-lg p-4 relative ${
-                  idx === selectedAddressIndex
-                    ? "border-pink-600 bg-pink-50"
-                    : "border-gray-300 hover:bg-gray-100"
-                }`}
+                className={`cursor-pointer border rounded-lg p-4 relative ${idx === selectedAddressIndex
+                  ? "border-pink-600 bg-pink-50"
+                  : "border-gray-300 hover:bg-gray-100"
+                  }`}
               >
                 <div onClick={() => handleSelectAddress(idx)}>
                   <p className="font-semibold">{addr.address_line}</p>
@@ -703,7 +695,7 @@ export default function Profile() {
         </div>
       )}
       {addresses.length === 0 && !isAdding && (
-          <p className="text-gray-500 text-center">No addresses found. Click "Add Address" to get started!</p>
+        <p className="text-gray-500 text-center">No addresses found. Click "Add Address" to get started!</p>
       )}
     </div>
   );

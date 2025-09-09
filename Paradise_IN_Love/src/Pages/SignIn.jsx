@@ -9,7 +9,7 @@ const SignIn = () => {
     email: '',
     password: '',
   });
-
+  const API_URL = import.meta.env.VITE_RENDER;
   const [message, setMessage] = useState('success'); // To show success/error messages
 
   // Handle input changes
@@ -23,7 +23,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/api/user/login', {
+      const response = await fetch(`${API_URL}/user/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

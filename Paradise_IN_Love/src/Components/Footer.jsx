@@ -39,7 +39,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <FaReceipt className="text-pink-500" />
-                <span className="font-medium">GST NO: 27AABCU9603R1Z2</span>
+                <span className="font-medium">GST NO: 27AUPPT4984R1Z4</span>
               </li>
             </ul>
           </div>

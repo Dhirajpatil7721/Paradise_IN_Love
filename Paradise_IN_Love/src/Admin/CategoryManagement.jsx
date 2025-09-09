@@ -14,11 +14,11 @@ const CategoryManagement = () => {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const isActiveLink = (path) => location.pathname === path ? "bg-pink-600 text-white" : "hover:bg-gray-700";
-
+  const API_URL = import.meta.env.VITE_RENDER;
   // Fetch all categories (GET)
   const fetchCategories = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/category/get-category", {
+      const res = await fetch(`${API_URL}category/get-category`, {
         method: "GET",
         credentials: "include",
       });
@@ -37,7 +37,7 @@ const CategoryManagement = () => {
   // Fetch subcategories by category ID (POST to correct endpoint)
   const fetchSubCategories = async (categoryId) => {
     try {
-      const res = await fetch("http://localhost:8080/api/subcategory/get-subcategory-by-Id", {
+      const res = await fetch(`${API_URL}/subcategory/get-subcategory-by-Id`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ const CategoryManagement = () => {
     if (!window.confirm(`Are you sure you want to delete the category "${selectedCategoryName}"?`)) return;
 
     try {
-      const res = await fetch("http://localhost:8080/api/category/delete-category", {
+      const res = await fetch(`${API_URL}/category/delete-category`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -123,7 +123,7 @@ const CategoryManagement = () => {
     if (!window.confirm(`Are you sure you want to delete the subcategory "${subCategory.name}"?`)) return;
 
     try {
-      const res = await fetch("http://localhost:8080/api/subcategory/delete-subcategory", {
+      const res = await fetch(`${API_URL}/subcategory/delete-subcategory`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -236,7 +236,7 @@ const CategoryManagement = () => {
             {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg> */}
-              ☰ Menu
+            ☰ Menu
           </button>
           <h2 className="text-2xl font-bold">Category Management</h2>
           <div className="w-10"></div> {/* Spacer for alignment */}

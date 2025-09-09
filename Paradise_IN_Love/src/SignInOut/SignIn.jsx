@@ -11,12 +11,12 @@ const SignIn = () => {
   const handleChange = e => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
- 
+  const API_URL = import.meta.env.VITE_RENDER;
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:8080/api/user/login', {
+      const res = await axios.post(`${API_URL}/user/login`, {
         email: formData.email,
         password: formData.password,
       }, {
@@ -27,7 +27,7 @@ const SignIn = () => {
         toast.success(res.data.message || 'Login successful!');
         // Redirect after 1.5 seconds
         setTimeout(() => {
-          navigate('/'); 
+          navigate('/');
         }, 1500);
       } else {
         toast.error(res.data.message || 'Login failed!');
@@ -102,7 +102,7 @@ const SignIn = () => {
           </form>
         </div>
       </div>
-      <ToastContainer  autoClose={50}/>
+      <ToastContainer autoClose={50} />
     </div>
   );
 };

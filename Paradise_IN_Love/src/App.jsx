@@ -146,6 +146,8 @@ import ScrollToTop from '../src/Components/ScrollToTop'
 import CategoryPage from './Components/CategoryPage';
 
 function App() {
+  console.log(import.meta.env);
+
   return (
     <>
       <ScrollToTop />

@@ -34,7 +34,7 @@ const products = [
     rating: '4.2 ★ 980',
     image1: 'src/assets/7.jpeg',
     image2: 'src/assets/1.jpeg',
-  },{
+  }, {
     name: 'Anarkali Suits',
     description: 'Floral Printed Tie-up Neck Designer Anarkali Suit with Dupatta',
     price: 'Rs. 815 (Rs. 2549, 68% OFF)',
@@ -54,49 +54,29 @@ const products = [
 ];
 
 const ProductView = () => {
+  const API_URL = import.meta.env.VITE_RENDER;
+  const [kurti, setKurti] = useState([]);
+  const categoryId = "683eb42bf4e1cfcb9b170319";
 
-// const [categories, setCategories] = useState([]);
-
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         const res = await fetch('http://localhost:8080/api/category/get-category');
-//         if (!res.ok) {
-//           throw new Error('Network response was not ok');
-//         }
-//         const data = await res.json();
-//         setCategories(data.data);
-//       } catch (err) {
-//         console.error('Error fetching categories:', err);
-//       }
-//     };
-    
-//     fetchCategories();
-//   }, []);
-//   console.log(categories);
-
-const [kurti, setKurti] = useState([]);
-const categoryId = "683eb42bf4e1cfcb9b170319"; 
-
-useEffect(() => {
-  const fetchProductsByCategory = async () => {
-    try {
-      const res = await fetch(`http://localhost:8080/api/product/get-product-by-category?id=${categoryId}`);
-      if (!res.ok) {
-        throw new Error('Network response was not ok');
+  useEffect(() => {
+    const fetchProductsByCategory = async () => {
+      try {
+        const res = await fetch(`${API_URL}/product/get-product-by-category?id=${categoryId}`);
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await res.json();
+        setKurti(data.data);
+        console.log(data.data);
+      } catch (err) {
+        console.error('Error fetching products by category:', err);
       }
-      const data = await res.json();
-      setKurti(data.data);
-      console.log(data.data);
-    } catch (err) {
-      console.error('Error fetching products by category:', err);
-    }
-  };
+    };
 
-  if (categoryId) {
-    fetchProductsByCategory();
-  }
-}, [categoryId]);
+    if (categoryId) {
+      fetchProductsByCategory();
+    }
+  }, [categoryId]);
 
 
   return (

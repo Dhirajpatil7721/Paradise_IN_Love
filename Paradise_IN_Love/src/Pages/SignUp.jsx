@@ -7,7 +7,7 @@ const SignUp = () => {
     email: '',
     password: '',
   });
-
+  const API_URL = import.meta.env.VITE_RENDER;
   const [message, setMessage] = useState(''); // Start with no message
 
   // Handle input change
@@ -22,7 +22,7 @@ const SignUp = () => {
 
     try {
       // Step 2: Send POST request to backend signup API
-      const response = await fetch('http://localhost:8080/api/user/register', {
+      const response = await fetch(`${API_URL}/user/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
