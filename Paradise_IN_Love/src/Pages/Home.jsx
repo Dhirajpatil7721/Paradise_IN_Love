@@ -10,13 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 // Import images
 // import homeImg from '../assets/Home.png';
 import homeImg from '../assets/HomeBg.png';
-import o3girl from '../assets/1.jpeg';
-import o3boy from '../assets/2.jpeg';
-import o3teengirl from '../assets/3.jpeg';
-import o3img from '../assets/4.jpeg';
-import o3goggle from '../assets/5.jpeg';
-import o3powder from '../assets/6.jpeg';
-import o3suits from '../assets/7.jpeg';
+import kurti from '../assets/1.jpeg';
+import gown from '../assets/gown.webp';
+import saree from '../assets/saree.jpg';
+import anarkali from '../assets/anarkali.jpg';
+import dressmaterial from '../assets/dressmaterial.jpg';
+import leggings from '../assets/leggings.jpg';
+import suits from '../assets/7.jpeg';
 import slider1 from '../assets/slider 1.jpeg';
 import slider2 from '../assets/slider 2.jpeg';
 import slider3 from '../assets/slider 3.jpeg';
@@ -67,22 +67,22 @@ const Home = () => {
   }, []);
 
   const categories = [
-    { id: "1", subIds: [], src: o3girl, label: 'Kurti', aos: 'zoom-in', path: '/kurti' },
-    { id: "2", subIds: [], src: o3boy, label: 'Gown', aos: 'zoom-out', path: '/gown' },
-    { id: "3", subIds: [], src: o3suits, label: 'Causal Suit', aos: 'zoom-in', path: '/causal-suit' },
-    { id: "4", subIds: [], src: o3img, label: 'Anarkali Suit', aos: 'zoom-out', path: '/Anarkali' },
-    { id: "5", subIds: [], src: o3goggle, label: 'Dress Material', aos: 'zoom-in', path: '/dress-material' },
-    { id: "6", subIds: [], src: o3teengirl, label: 'Saree', aos: 'zoom-out', path: '/saree' },
-    { id: "7", subIds: [], src: o3powder, label: 'Leggings', aos: 'zoom-in', path: '/leggings' },
+    { id: "1", subIds: [], src: kurti, label: 'Kurti', aos: 'zoom-in', path: '/kurti' },
+    { id: "2", subIds: [], src: gown, label: 'Gown', aos: 'zoom-out', path: '/gown' },
+    { id: "3", subIds: [], src: suits, label: 'Causal Suit', aos: 'zoom-in', path: '/causal-suit' },
+    { id: "4", subIds: [], src: anarkali, label: 'Anarkali Suit', aos: 'zoom-out', path: '/Anarkali' },
+    { id: "5", subIds: [], src: dressmaterial, label: 'Dress Material', aos: 'zoom-in', path: '/dress-material' },
+    { id: "6", subIds: [], src: saree, label: 'Saree', aos: 'zoom-out', path: '/saree' },
+    { id: "7", subIds: [], src: leggings, label: 'Leggings', aos: 'zoom-in', path: '/leggings' },
   ];
 
   const newArrivals = [
-    { src: o3girl, label: 'Saree', path: '/saree' },
-    { src: o3boy, label: 'Gown', path: "/gown" },
-    { src: o3teengirl, label: 'Kurti', path: "/kurti" },
-    { src: o3img, label: 'Anarkali Suit', path: "/Anarkali" },
-    { src: o3goggle, label: 'Dress Material', path: "/dress-material" },
-    { src: o3powder, label: 'Leggings', path: "/leggings" },
+    { src: saree, label: 'Saree', path: '/saree' },
+    { src: gown, label: 'Gown', path: "/gown" },
+    { src: kurti, label: 'Kurti', path: "/kurti" },
+    { src: anarkali, label: 'Anarkali Suit', path: "/Anarkali" },
+    { src: dressmaterial, label: 'Dress Material', path: "/dress-material" },
+    { src: leggings, label: 'Leggings', path: "/leggings" },
   ];
 
   // Animation variants

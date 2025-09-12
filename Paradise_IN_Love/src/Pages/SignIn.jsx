@@ -105,9 +105,9 @@ const SignIn = () => {
             >
               SignIn
             </button>
-            <p className="text-sm mt-3 text-center text-gray-600 hover:underline">
+            {/* <p className="text-sm mt-3 text-center text-gray-600 hover:underline">
               <Link to="/forgot-password">Forgot Password?</Link>
-            </p>
+            </p> */}
             <p className="text-sm mt-4 text-center text-gray-700">
               Don't have an account?{' '}
               <Link to="/signup" className="text-rose-500 underline">Sign up</Link>

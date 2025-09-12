@@ -129,7 +129,7 @@ import UserOrders from './Pages/UserOrders';
 // Auth
 import SignIn from './SignInOut/SignIn';
 import SignUp from './SignInOut/SignUp';
-import Forgot from './SignInOut/Forgot';
+// import Forgot from './SignInOut/Forgot';
 
 // Admin
 import AdminProductAddPage from './Admin/AddProduct';
@@ -194,7 +194,7 @@ function App() {
           {/* Auth routes (will hide Navbar and Footer) */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot-password" element={<Forgot />} />
+          {/* <Route path="/forgot-password" element={<Forgot />} /> */}
         </Route>
       </Routes>
     </>
